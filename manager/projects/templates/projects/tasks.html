@@ -1,0 +1,51 @@
+{% extends "blog/main.html" %}
+
+{% block content %}
+
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>Tasks</h5>
+        </div>
+        <div class="card card-body">
+            <table class="table">
+                <tr>
+                    <th>Project</th>
+                    <th>Task</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>Duration</th>
+                    <th>Assigned to</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+
+                {% for i in tasks %}
+
+                <tr>
+                    <td>{{ i.project }}</td>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.description }}</td>
+                    <td>{{ i.start_date|date:'Y-m-d' }}</td>
+                    <td>{{ i.duration }}</td>
+                    <td>{{ i.assigned_to }}</td>
+                    <td>{{ i.status }}</td>
+                    <td><a href="">Update</a></td>
+                    <td><a href="">Delete</a></td>
+                                  
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div> 
+
+    </div>
+</div>
+
+
+{% endblock content %}

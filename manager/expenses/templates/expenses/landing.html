@@ -1,0 +1,68 @@
+{% extends "blog/main.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="card card-body">
+            <h5>Budgeted Expenses</h5>
+            <table class="table table-sm">
+                <tr>
+                    <th>Req. No.</th>
+                    <th>Expense No.</th>
+                    <th>Budget Line</th>
+                    <th>Description</th>
+                    <th>Total</th>
+                </tr>
+
+                {% for b in budgetedExpenses %}
+                <tr>
+                    <td>{{ b.requisition }}</td>
+                    <td>{{ b.id }}</td>
+                    <td>{{ b.budget_line }}</td>
+                    <td>{{ b.description }}</td>
+                    <td>{{ b.total }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="card card-body">
+            <h5>Actual Expenses</h5>
+            <table class="table table-sm">
+                <tr>
+                    <th>Liq. No.</th>
+                    <th>Expense No.</th>
+                    <th>Budget Line</th>
+                    <th>Description</th>
+                    <th>Total</th>
+                </tr>
+
+                {% for a in actualExpenses %}
+                <tr>
+                    <td>{{ a.liquidation }}</td>
+                    <td>{{ a.id }}</td>
+                    <td>{{ a.budget_line }}</td>
+                    <td>{{ a.description }}</td>
+                    <td>{{ a.total }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

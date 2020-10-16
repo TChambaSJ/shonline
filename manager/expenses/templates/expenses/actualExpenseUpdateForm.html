@@ -1,0 +1,39 @@
+{% extends "blog/main.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="row">
+
+    <div class="col-md">
+        <div class="card card-body">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {% for item in form %}
+            <div class="row">
+
+                <div class="col-md-2">{{ item.budget_line|as_crispy_field }}</div>
+                <div class="col-md-4">{{ item.description|as_crispy_field }}</div>
+                <div class="col-md-2">{{ item.quantity|as_crispy_field }}</div>
+                <div class="col-md-2">{{ item.unit_cost|as_crispy_field }}</div>
+                <div class="col-md-2">{{ item.total|as_crispy_field }}</div>
+
+            </div>
+            {% endfor%}
+            <div class="row">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+  {% endblock content %}
+
+
+
+
+
+
+
+

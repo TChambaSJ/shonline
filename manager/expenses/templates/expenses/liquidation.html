@@ -1,0 +1,100 @@
+{% extends "blog/main.html" %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="row" >
+    <div class="col-md-8">
+        <div class="row" >
+            <div class="col-md-4">
+                <div class="card card-body">
+                    
+                    <p><h6>Status: {{liquidation.status}}</h6></p>
+                    
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'update_liquidation' liquidation.id %}">Update</a>
+                    <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_actualExpense' liquidation.id %}">Add Expense</a>
+
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card card-body">
+                    <p>Reference: {{ liquidation.requisition }}</p>
+                    <p>Compiled By: {{ liquidation.compiled_by }}</p>
+                    <p>Date Compiled: {{ liquidation.date_submitted}}</p>
+                    <p>Processed by: {{ liquidation.processed_by}}</p>
+                    <p>Date Processed: {{ liquidation.date_precessed}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card text-center text-white mb-3" id='tasks-completed'>
+                    <div class="card-header">
+                        <h5 class="card-title" id=top-title>Burn Rate</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title" id=top-title></h3>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="card text-center text-white mb-3" id='tasks-completed'>
+                    <div class="card-header">
+                        <h5 class="card-title" id=top-title>Work Rate</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title" id=top-title></h3>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-body">
+            <h5>Actual Expenses</h5>
+            <table class="table table-sm">
+                <tr>
+                    <th>Liq No.</th>
+                    <th>Act. Expense No.</th>
+                    <th>Budget Line</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Actual Cost</th>
+                    <th>Total Spent</th>
+<!--                    <th></th>-->
+<!--                    <th></th>-->
+                    
+                </tr>
+                {% for actualExpense in actualExpenses %}
+                <tr>
+                    <td>{{ actualExpense.liquidation }}</td>
+                    <td>{{ actualExpense.id }}</td>
+                    <td>{{ actualExpense.budget_line }}</td>
+                    <td>{{ actualExpense.description }}</td>
+                    <td>{{ actualExpense.quantity }}</td>
+                    <td>{{ actualExpense.unit_cost }}</td>
+                    <td>{{ actualExpense.total }}</td>
+<!--                    <td><a class="btn btn-sm btn-info" href="">Update</a></td>-->
+<!--                    <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>-->
+                                  
+                </tr>
+                {% endfor %}
+                
+            </table>
+
+        </div> 
+
+    </div>
+
+</div>
+
+{% endblock %}

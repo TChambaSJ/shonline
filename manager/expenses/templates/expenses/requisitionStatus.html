@@ -1,0 +1,117 @@
+        <div class="row" >
+            <div class="col-md-2">
+                <div class="card card-body">
+
+                    {% if requisition.status == 'Pending' and requisition.requested_by != user%}
+                    <p>Status: {{ requisition.status }}</p>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'recommend-requisition' requisition.id %}">Recommend</a>
+
+                    {% elif requisition.status == 'Recommended' and requisition.requested_by != user and requisition.recommended_by != user %}
+                    <p>Status: {{ requisition.status }}</p>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'authorise-requisition' requisition.id %}">Authorise</a>
+
+                    {% elif requisition.status == 'Authorised' and requisition.requested_by != user and requisition.recommended_by != user and requisition.authorized_by != user %}
+                    <p>Status: {{ requisition.status }}</p>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'process-requisition' requisition.id %}">Process</a>
+
+                    {% elif requisition.status == 'Processed' and requisition.requested_by == user %}
+                    <p>Status: {{ requisition.status }}</p>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'confirm-payment' requisition.id %}">Confirm Payment</a>
+
+                    {% elif requisition.status == 'Confirmed' and requisition.requested_by == user %}
+                    <p>Status: {{ requisition.status }}</p>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_liquidation' requisition.id %}">Liquidate</a>
+                    {% else %}
+                    <p>Status: {{ requisition.status }}</p>
+
+                    {% endif %}
+
+                    {% if requisition.status == 'Pending' or requisition.status == 'Rejected' and requisition.requested_by == user %}
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'update_requisition' requisition.id %}">Update</a>
+                    <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_budgetedExpense' requisition.id %}">Add Expenses</a>
+
+                    {% endif %}
+                </div>
+                <br>
+            </div>
+
+            <div class="col-md-5">
+                <div class="card card-body">
+                   <p>Budget: {{ requisition.budget }}</p>
+                    <p>Payee: {{requisition.payee}}</p>
+                    <p>Total Requested: {{ requisition.total}}</p>
+                    <p>Payment Type: {{ requisition.payment_type }}</p>
+                    {% if requisition.payment_type == 'USD Cash' or requisition.payment_type == 'ZWL Cash' %}
+                        <p>Justification for Cash Payment: {{ requisition.justification_for_cash_payment }}</p>
+                    {% else %}
+                        <p>Payee Details: {{ requisition.payee_details }}</p>
+                    {% endif %}
+
+
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card card-body">
+                    <p>Requested By: {{ requisition.requested_by }} on {{requisition.date_requested}}</p>
+                    {% if requisition.status == 'Recommended' %}
+                        <p>Recommended By: {{ requisition.recommended_by }}</p>
+                    {% elif requisition.status == 'Authorised' %}
+                        <p>Recommended By: {{ requisition.recommended_by }} on {{requisition.recommendation_date}}</p>
+                        <p>Authorized By: {{ requisition.authorized_by }} on {{requisition.authorization_date}}</p>
+                    {% elif requisition.status == 'Processed' %}
+                        <p>Recommended By: {{ requisition.recommended_by }} on {{requisition.recommendation_date}}</p>
+                        <p>Authorized By: {{ requisition.authorized_by }} on {{requisition.authorization_date}}</p>
+                        <p>Processed By: {{ requisition.processed_by }} on {{requisition.process_date}} </p>
+                    {% else %}
+
+                    {% endif %}
+
+                    {% if requisition.status == 'Rejected' %}
+                    <p> Reason for Rejection:</p>
+                    <p>{{ requisition.reason_for_rejection }}</p>
+                    
+
+                    {% endif%}
+
+                </div>
+            </div>
+        </div>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>Budgeted Expenses</h5>
+            <table class="table table-sm">
+                <tr>
+                    <th>Req. No.</th>
+                    <th>Budget Line</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Cost</th>
+                    <th>Total</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+
+                </tr>
+                {% for budgetedExpense in budgetedExpenses %}
+                <tr>
+                    <td>{{ budgetedExpense.requisition }}</td>
+                    <td>{{ budgetedExpense.budget_line }}</td>
+                    <td>{{ budgetedExpense.description }}</td>
+                    <td>{{ budgetedExpense.quantity }}</td>
+                    <td>{{ budgetedExpense.unit_cost }}</td>
+                    <td>{{ budgetedExpense.total }}</td>
+                    <td><a class="btn btn-sm btn-info" href="">Update</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>
+
+                </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

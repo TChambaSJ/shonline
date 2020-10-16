@@ -1,0 +1,49 @@
+{% extends "blog/main.html" %}
+
+{% block content %}
+
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>Budgeted Expenses</h5>
+        </div>
+        <div class="card card-body">
+            <table class="table">
+                <tr>
+                    <th>Requisition</th>
+                    <th>B- Line</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Cost</th>
+                    <th>Total</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+
+                {% for i in budgeted_expenses %}
+
+                <tr>
+                    <td>{{ i.requisition }}</td>
+                    <td>{{ i.budget_line }}</td>
+                    <td>{{ i.description }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td>{{ i.unit_cost }}</td>
+                    <td>{{ i.total }}</td>
+                    <td><a href="">Update</a></td>
+                    <td><a href="">Delete</a></td>
+                                  
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div> 
+
+    </div>
+</div>
+
+
+{% endblock content %}

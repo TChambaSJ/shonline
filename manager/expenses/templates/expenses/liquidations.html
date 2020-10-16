@@ -1,0 +1,50 @@
+{% extends "blog/main.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'expenses/liquidation_status.html' %}
+
+<div class="row">
+      <div class="card card-body">
+          <form action="" method="get">
+              <div class="row">
+                  <div class="col-md-2">{{ myFilter.form.requisition|as_crispy_field }}</div>
+                  <div class="col-md-2">{{ myFilter.form.compiled_by|as_crispy_field }}</div>
+                  <div class="col-md-2">{{ myFilter.form.status|as_crispy_field }}</div>
+                  <div class="col-md-2">{{ myFilter.form.start_date|as_crispy_field }}</div>
+                  <div class="col-md-2">{{ myFilter.form.end_date|as_crispy_field }}</div>
+                  <div class="col-md-2"><button class="btn btn-primary" type="submit">Search</button></div>
+              </div>
+          </form>
+            <h5>Liquidations</h5>
+          <table class="table">
+              <tr>
+
+                  <th>Ref No.</th>
+                  <th>Compiled_by</th>
+                  <th>Budgeted Total</th>
+                  <th>Actual Total</th>
+                  <th>Variance</th>
+                  <th>Status</th>
+                  <th></th>
+              </tr>                  
+        
+              {% for liquidation in liquidations %}
+
+              <tr>
+
+                <td>{{ liquidation.requisition }}</td>
+                <td>{{ liquidation.compiled_by }}</td>
+                <td>{{ liquidation.total_requested }}</td>
+                <td>{{ liquidation.total_spent }}</td>
+                <td>{{ liquidation.balance }}</td>
+                <td>{{ liquidation.status}}</td>
+                <td><a class="btn btn-sm btn-info" href="{% url 'liquidation' liquidation.id %}">View</a></td>
+              </tr>
+
+              {% endfor %}
+          </table>
+      </div>
+</div>
+
+     
+{% endblock content %}

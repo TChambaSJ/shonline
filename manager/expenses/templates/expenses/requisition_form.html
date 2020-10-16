@@ -1,0 +1,48 @@
+{% extends "blog/main.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        <div class="content-section">
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4">Requisition Form for Payment</legend>
+                        <div class="row">
+                            <div class="col-md-3">{{ form.budget|as_crispy_field }}</div>
+                            <div class="col-md-9">{{ form.payee|as_crispy_field }}</div>
+                        </div>
+
+                        <div>{{ form.payee_details|as_crispy_field }}</div>
+                        <div class="row">
+                            <div class="col-md-4">{{ form.total|as_crispy_field }}</div>
+                            <div class="col-md-4">{{ form.payment_type|as_crispy_field }}</div>
+
+                        </div>
+
+                        <div>{{ form.justification_for_cash_payment|as_crispy_field }}</div>
+                        <div>{{ form.quotation|as_crispy_field }}</div>
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-outline-info" type="submit">Submit</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-2">
+    </div>
+
+</div>
+
+{% endblock content %}
