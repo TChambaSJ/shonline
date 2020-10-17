@@ -133,6 +133,9 @@ a:hover{
 
 }
 
+#rejected-requisitions{
+  background-color: red;
+}
 #pending-requisitions{
   background-color: orange;
 }
@@ -142,12 +145,14 @@ a:hover{
 #authorised-requisitions{
   background-color: yellowgreen;
 }
-#rejected-requisitions{
-  background-color: red;
+
+#processed-requisitions{
+  background-color: rgb(78, 179, 19);
 }
 #paid-requisitions{
-  background-color: green;
+  background-color: rgb(2, 112, 2);
 }
+
 
 
 /* css for home */

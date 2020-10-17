@@ -2,7 +2,6 @@ from django.urls import path
 from django.contrib.auth.models import User
 from . import views
 
-
 urlpatterns = [
 
 # ******************************* List URLs *****************************
@@ -23,6 +22,7 @@ urlpatterns = [
 
     path('liquidation/<str:pk>/', views.liquidation, name='liquidation'),
     path('requisition/<str:pk>/', views.requisition, name='requisition'),
+    
 
 
 # ******************************* Update URLs ****************************
@@ -37,9 +37,16 @@ urlpatterns = [
     path('process-requisition/<str:pk>/', views.processRequisition, name='process-requisition'),
     path('confirm-payment/<str:pk>/', views.confirmPayment, name='confirm-payment'),
 
+    path('process-liquidation/<str:pk>/', views.processLiquidation, name='process-liquidation'),
+    path('close-liduidation/<str:pk>/', views.closeLiquidation, name='close-liquidation'),
+
+
+
 
 # ******************************* Delete URLs *****************************
 
-    path('delete_budgetedExpense/<str:pk>/delete', views.deleteBudgetedExpense, name='delete_budgetedExpense'),
-    
+    path('delete_actualExpense/<str:pk>/', views.deleteActualExpense, name='delete_actualExpense'),
+    path('delete_budgetedExpense/<str:pk>/', views.deleteBudgetedExpense, name='delete_budgetedExpense'),
+    path('delete_requisition/<str:pk>/', views.deleteRequisition, name='delete_requisition'),
+    path('delete_liquidation/<str:pk>/', views.deleteLiquidation, name='delete_liquidation')
 ]

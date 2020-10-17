@@ -2,15 +2,15 @@
             <div class="col-md-2">
                 <div class="card card-body">
 
-                    {% if requisition.status == 'Pending' and requisition.requested_by != user%}
+                    {% if requisition.status == 'Pending' and requisition.requested_by != user %} 
                     <p>Status: {{ requisition.status }}</p>
                     <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'recommend-requisition' requisition.id %}">Recommend</a>
 
-                    {% elif requisition.status == 'Recommended' and requisition.requested_by != user and requisition.recommended_by != user %}
+                    {% elif requisition.status == 'Recommended' and requisition.requested_by != user %}
                     <p>Status: {{ requisition.status }}</p>
                     <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'authorise-requisition' requisition.id %}">Authorise</a>
 
-                    {% elif requisition.status == 'Authorised' and requisition.requested_by != user and requisition.recommended_by != user and requisition.authorized_by != user %}
+                    {% elif requisition.status == 'Authorised' and requisition.requested_by != user %}
                     <p>Status: {{ requisition.status }}</p>
                     <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'process-requisition' requisition.id %}">Process</a>
 
@@ -18,7 +18,7 @@
                     <p>Status: {{ requisition.status }}</p>
                     <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'confirm-payment' requisition.id %}">Confirm Payment</a>
 
-                    {% elif requisition.status == 'Confirmed' and requisition.requested_by == user %}
+                    {% elif requisition.status == 'Paid' and requisition.requested_by == user %}
                     <p>Status: {{ requisition.status }}</p>
                     <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_liquidation' requisition.id %}">Liquidate</a>
                     {% else %}
@@ -26,12 +26,22 @@
 
                     {% endif %}
 
-                    {% if requisition.status == 'Pending' or requisition.status == 'Rejected' and requisition.requested_by == user %}
+                    {% if requisition.status == 'Pending' and requisition.requested_by == user %}
                     <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'update_requisition' requisition.id %}">Update</a>
-                    <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
+                    <a class="btn btn-outline-danger btn-sm btn-block" href="{% url 'delete_requisition' requisition.id %}">Delete</a>
                     <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_budgetedExpense' requisition.id %}">Add Expenses</a>
 
+
+
                     {% endif %}
+
+                    {% if requisition.status == 'Rejected' and requisition.requested_by == user %}
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'update_requisition' requisition.id %}">Update</a>
+                    <a class="btn btn-outline-danger btn-sm btn-block" href="{% url 'delete_requisition' requisition.id %}">Delete</a>
+                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_budgetedExpense' requisition.id %}">Add Expenses</a>                   
+
+                    {% endif %}
+
                 </div>
                 <br>
             </div>
@@ -77,41 +87,3 @@
                 </div>
             </div>
         </div>
-
-<div class="row">
-    <div class="col-md">
-        <div class="card card-body">
-            <h5>Budgeted Expenses</h5>
-            <table class="table table-sm">
-                <tr>
-                    <th>Req. No.</th>
-                    <th>Budget Line</th>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Unit Cost</th>
-                    <th>Total</th>
-                    <th>Update</th>
-                    <th>Delete</th>
-
-                </tr>
-                {% for budgetedExpense in budgetedExpenses %}
-                <tr>
-                    <td>{{ budgetedExpense.requisition }}</td>
-                    <td>{{ budgetedExpense.budget_line }}</td>
-                    <td>{{ budgetedExpense.description }}</td>
-                    <td>{{ budgetedExpense.quantity }}</td>
-                    <td>{{ budgetedExpense.unit_cost }}</td>
-                    <td>{{ budgetedExpense.total }}</td>
-                    <td><a class="btn btn-sm btn-info" href="">Update</a></td>
-                    <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>
-
-                </tr>
-                {% endfor %}
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>

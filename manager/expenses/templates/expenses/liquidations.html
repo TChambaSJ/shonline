@@ -1,7 +1,7 @@
 {% extends "blog/main.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-{% include 'expenses/liquidation_status.html' %}
+{% include 'expenses/liquidationsStatus.html' %}
 
 <div class="row">
       <div class="card card-body">
@@ -9,22 +9,24 @@
               <div class="row">
                   <div class="col-md-2">{{ myFilter.form.requisition|as_crispy_field }}</div>
                   <div class="col-md-2">{{ myFilter.form.compiled_by|as_crispy_field }}</div>
-                  <div class="col-md-2">{{ myFilter.form.status|as_crispy_field }}</div>
-                  <div class="col-md-2">{{ myFilter.form.start_date|as_crispy_field }}</div>
-                  <div class="col-md-2">{{ myFilter.form.end_date|as_crispy_field }}</div>
-                  <div class="col-md-2"><button class="btn btn-primary" type="submit">Search</button></div>
+                  <div class="col-md-1">{{ myFilter.form.status|as_crispy_field }}</div>
+                  <div class="col-md-3">{{ myFilter.form.start_date|as_crispy_field }}</div>
+                  <div class="col-md-3">{{ myFilter.form.end_date|as_crispy_field }}</div>
+                  <div class="col-md-1"><button class="btn-primary btn-sm btn-block" type="submit" id='create-button'>Search</button></div>
               </div>
           </form>
             <h5>Liquidations</h5>
           <table class="table">
               <tr>
 
-                  <th>Ref No.</th>
-                  <th>Compiled_by</th>
+                  <th>Ref Req No.</th>
+                  <th>Liq No.</th>
+                  <th>Compiled By</th>
                   <th>Budgeted Total</th>
                   <th>Actual Total</th>
-                  <th>Variance</th>
+                  <th>Balance</th>
                   <th>Status</th>
+                  <th>Date Submitted</th>
                   <th></th>
               </tr>                  
         
@@ -33,11 +35,13 @@
               <tr>
 
                 <td>{{ liquidation.requisition }}</td>
+                <td>{{ liquidation.id }}</td>
                 <td>{{ liquidation.compiled_by }}</td>
                 <td>{{ liquidation.total_requested }}</td>
                 <td>{{ liquidation.total_spent }}</td>
                 <td>{{ liquidation.balance }}</td>
                 <td>{{ liquidation.status}}</td>
+                <td>{{ liquidation.date_submitted }}</td>
                 <td><a class="btn btn-sm btn-info" href="{% url 'liquidation' liquidation.id %}">View</a></td>
               </tr>
 

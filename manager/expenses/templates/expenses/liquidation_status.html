@@ -1,51 +1,59 @@
+<div class="row" >
+    <div class="col-md-2">
+        <div class="card card-body">
+            
 
-<div class="row">
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-2" id='rejected-requisitions'>
-                <div class="card-header">
-                    <h5 class="card-title" id=top-title>Rejected</h5>
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title" id=top-title>{{ rejected }}</h3>
-                </div>
-            </div>
+            {% if liquidation.status == 'Pending' and liquidation.compiled_by != user %} 
+                <p>Status: {{ requisition.status }}</p>
+                <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'process-liquidation' liquidation.id %}">Process</a>
+                
+            {% elif liquidation.status == 'Processed' %}
+                <p>Status: {{ requisition.status }}</p>
+                <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'close-liquidation' liquidation.id %}">Close</a>
+
+            {% else %}
+                <p>Status: {{liquidation.status}}</p>
+
+            {% endif %}
+            
+                
+
+            {% if liquidation.compiled_by == user and liquidation.status != 'Processed' %}
+            
+                <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'update_liquidation' liquidation.id %}">Update</a>
+                <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
+                <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_actualExpense' liquidation.id %}">Add Expense</a>
+                
+            {% endif %}
+            
+
         </div>
     </div>
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-2" id='pending-requisitions'>
-                <div class="card-header">
-                    <h5 class="card-title" id=top-title>Pending</h5>
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title" id=top-title> {{ pending }}</h3>
-                </div>
-            </div>
+    <div class="col-md-5">
+        <div class="card card-body">
+            
+            <p>Submitted by: {{ liquidation.compiled_by}} on {{ liquidation.date_submitted}}</p>
+            
+            <p>Total Requested: {{ liquidation.total_requested}}</p>
+            <p>Total Spent: {{ liquidation.total_spent}}</p>
+            <p>Balance: {{ liquidation.balance}}</p>
+
         </div>
     </div>
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-2" id='authorised-requisitions'>
-                <div class="card-header">
-                    <h5 class="card-title" id=top-title>Processed</h5>
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title" id=top-title> {{ processed }}</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="col-md">
-            <div class="card text-center text-white mb-2" id='paid-requisitions'>
-                <div class="card-header">
-                    <h5 class="card-title" id=top-title>Closed</h5>
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title" id=top-title>{{ closed }}</h3>
-                </div>
-            </div>
+    <div class="col-md-5">
+        <div class="card card-body">
+          
+            <p>Processed by: {{ liquidation.processed_by}} on {{ liquidation.process_date}} </p>
+            
+        {% if liquidation.status == 'Rejected' %}  
+
+            <p>Reason for Rejection: {{ liquidation.reason_for_rejection_by_Finance }}</p>
+
+        {% else %}
+            <p>Comments: {{liquidation.comments}}</p>
+        
+        {% endif %}
         </div>
     </div>
 </div>
+  

@@ -13,11 +13,10 @@
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">Liquidation Approval</legend>
                         <div class="row">
-                            <div class="col-md-6">{{ form.status|as_crispy_field }}</div>
-                            <div class="col-md-6">{{ form.processed_by|as_crispy_field }}</div>
+
+                            <div class="col-md-3">{{ form.status|as_crispy_field }}</div>
                             
-                        </div> 
-                        <div>{{ form.reason_for_rejection_by_Finance|as_crispy_field }}</div>                     
+                        </div>                     
                     
                     </fieldset>
                         <div class="form-group">

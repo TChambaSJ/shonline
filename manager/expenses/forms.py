@@ -35,10 +35,22 @@ class ConfirmPaymentForm(ModelForm):
         model = Requisition
         fields = ['status', 'reason_for_rejection']
 
+
+class CloseLiquidationForm(ModelForm):
+    class Meta:
+        model = Liquidation
+        fields = ['status',]
+
+
 class LiquidationForm(ModelForm):
     class Meta:
         model = Liquidation
-        fields = ['requisition', 'compiled_by', 'total_requested', 'total_spent', 'balance','comments' ,'receipts', ]
+        fields = ['requisition', 'compiled_by', 'total_requested', 'total_spent', 'balance','comments' ,'receipts' ]
+
+class ProcessLiquidationForm(ModelForm):
+    class Meta:
+        model = Liquidation
+        fields = ['status', 'processed_by', 'reason_for_rejection_by_Finance']
 
 
 class ActualExpenseForm(ModelForm):

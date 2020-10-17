@@ -3,64 +3,74 @@
 {% block content %}
 {% include 'expenses/status.html' %}
 
-<div class="row">
-    <div class="col">
-          <div class="card card-body">
-              <div class="row">
-                    <div class="col">
-                        <div class="card card-body">
-                            <form action="" method="get">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <h5>Requisitions</h5>
-                                    </div>
-                                    <div class="col-md-2">{{ myFilter.form.budget|as_crispy_field }}</div>
-                                    <div class="col-md-3">{{ myFilter.form.requested_by|as_crispy_field }}</div>
-                                    <div class="col-md-3">{{ myFilter.form.payee|as_crispy_field }}</div>
-                                    <div class="col-md-2">{{ myFilter.form.status|as_crispy_field }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_requisition' %}" id='create-button'>Create New Requisition</a>
-                                    </div>
-                                    <div class="col-md-4">{{ myFilter.form.start_date|as_crispy_field }}</div>
-                                    <div class="col-md-4">{{ myFilter.form.end_date|as_crispy_field }}</div>
-                                    <div class="col-md-2"><button class="btn btn-primary" type="submit">Search</button></div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+
+
+<div class="row"> 
+    <div class="card card-body">                    
+        <form action="" method="get">
+            <div class="row">
+                <div class="col-md-2">
+                    <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_requisition' %}" id='create-button'>Create New Requisition</a>
                 </div>
-              <table class="table">
-                  <tr>
-                    <th>No.</th>
-                    <th>Budget</th>
-                    <th>Requested by</th>
-                    <th>Payee</th>
-                    <th>Date Submitted</th>
-                    <th>Amount</th>
-                    <th>Payment Type</th>
-                    <th>Status</th>
-                    <th></th>
-                  </tr>
-
-                  {% for i in requisitions %}
-                  <tr>
-                    <td>{{ i.id }}</td>
-                    <td>{{ i.budget }}</td>
-                    <td>{{ i.requested_by }}</td>
-                    <td>{{ i.payee }}</td>
-                    <td>{{ i.date_requested }}</td>
-                    <td>{{ i.total }}</td>
-                    <td>{{ i.payment_type }}</td>
-                    <td>{{ i.status}}</td>
-                    <td><a class="btn btn-sm btn-info" href="">View</a></td>
-                  </tr>
-                  {% endfor %}
-
-              </table>
-          </div>
+                <div class="col-md-2">{{ myFilter.form.budget|as_crispy_field }}</div>
+                <div class="col-md-2">{{ myFilter.form.requested_by|as_crispy_field }}</div>
+                <div class="col-md-2">{{ myFilter.form.payee|as_crispy_field }}</div>
+                <div class="col-md-2">{{ myFilter.form.status|as_crispy_field }}</div>
+                <div class="col-md-2"><button class="btn-primary btn-sm btn-block" type="submit" id='create-button'>Search</button></div>
+            </div>
+        </form>
     </div>
+</div>
+<div class="row">
+    <table class="table">
+        <tr>
+            <th>No.</th>
+            <th>Budget</th>
+            <th>Requested by</th>
+            <th>Payee</th>
+            <th>Date Submitted</th>
+            <th>Amount</th>
+            <th>Payment Type</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+
+        {% for i in requisitions %}
+        <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.budget }}</td>
+            <td>{{ i.requested_by }}</td>
+            <td>{{ i.payee }}</td>
+            <td>{{ i.date_requested }}</td>
+            <td>{{ i.total }}</td>
+            <td>{{ i.payment_type }}</td>
+            <td>{{ i.status}}</td>
+            <td><a class="btn btn-sm btn-info" href="">View</a></td>
+        </tr>
+        {% endfor %}
+        {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+
+    </table>
 </div>
      
 {% endblock content %}

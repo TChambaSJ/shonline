@@ -34,10 +34,10 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
 
-            group = Group.objects.get(name='Partners')
+            group = Group.objects.get(name='Partner')
             user.groups.add(group)
 
-            messages.success(request, username + ' ' + f'your account was successfully created. You are now able to log in.')
+            messages.success(request, username + ' ' + f', your account was successfully created. You are now able to log in.')
             return redirect('login')
     else:
         form = UserRegisterForm()

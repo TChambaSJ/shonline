@@ -3,4 +3,50 @@
 
 {% block content %}
 {% include 'expenses/requisitionStatus.html' %}
+
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>Budgeted Expenses</h5>
+            <table class="table table-sm">
+                <tr>
+                    
+                    <th>Budget Line</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Cost</th>
+                    <th>Total</th>
+                    <th>Date Created</th>
+                    <th></th>
+                    <th></th>
+
+                </tr>
+                {% for budgetedExpense in budgetedExpenses %}
+
+                <tr>
+                    
+                    
+                    <td>{{ budgetedExpense.budget_line }}</td>
+                    <td>{{ budgetedExpense.description }}</td>
+                    <td>{{ budgetedExpense.quantity }}</td>
+                    <td>{{ budgetedExpense.unit_cost }}</td>
+                    <td>{{ budgetedExpense.total }}</td>
+                    <td>{{ budgetedExpense.date_created }}</td>
+                    <td><a class="btn btn-sm btn-info" href="{% url 'update_budgetedExpense' budgetedExpense.id %}">Update</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="{% url 'delete_budgetedExpense' budgetedExpense.id %}">Delete</a></td>
+                
+                </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
 {% endblock %}

@@ -11,8 +11,8 @@ class Manager(models.Model):
         ('Administration', 'Admininstration'),
     )
 
-    name = models.ForeignKey(User, on_delete=models.CASCADE)
-    department = models.CharField(max_length=50, choices=PORTIFOLIO)
+    name = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    department = models.CharField(max_length=50, choices=PORTIFOLIO, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
@@ -25,23 +25,24 @@ class HOD(models.Model):
         ('APB', 'APB'),
     )
 
-    name = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     department = models.CharField(max_length=50, choices=DEPARTMENT)
 
     def __str__(self):
         return str(self.name)
 
 class FinanceOfficer(models.Model):
-    name = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return str(self.name)
 
 
 class Budget(models.Model):
-    funder = models.CharField(max_length=100)
-    manager = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    funder = models.CharField(max_length=100, null=True)
+    manager = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.funder
@@ -52,7 +53,7 @@ class BudgetLine(models.Model):
     code = models.CharField(max_length=50, default=None)
     description = models.CharField(max_length=255, default=None, null=True, blank=True)
     total_allocation = models.DecimalField(max_digits=10, decimal_places=2, default=None)
-    date_created = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.code
@@ -75,16 +76,16 @@ class Requisition(models.Model):
         ('Paid', 'Paid'),
         ('Confirmed', 'Confirmed')
     )
-    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
+    budget = models.ForeignKey(Budget, on_delete=models.CASCADE, null=True)
     payment_type = models.CharField(max_length=30, choices=PAYMENTMODE, default='ZWL Bank Transfer')
-    payee = models.CharField(max_length=255)
-    payee_details = models.CharField(max_length=255)
-    total = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+    payee = models.CharField(max_length=255, null=True, blank=True)
+    payee_details = models.CharField(max_length=255, null=True, blank=True)
+    total = models.DecimalField(max_digits=20, decimal_places=2, default=0.00, null=True)
     justification_for_cash_payment = models.CharField(max_length=255, null=True, blank=True)
-    requested_by = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
-    date_requested = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=30, choices=STATUS, default='Pending')
-    recommended_by = models.ForeignKey(HOD, on_delete=models.CASCADE,null=True, blank=True ,default=None)
+    requested_by = models.ForeignKey(User, default=None, on_delete=models.CASCADE, null=True)
+    date_requested = models.DateTimeField(auto_now_add=True, null=True)
+    status = models.CharField(max_length=30, choices=STATUS, default='Pending', null=True)
+    recommended_by = models.ForeignKey(HOD, on_delete=models.CASCADE,null=True, blank=True, default=None)
     authorized_by = models.ForeignKey(Manager, on_delete=models.CASCADE, null=True, blank=True, default=None)
     processed_by = models.ForeignKey(FinanceOfficer, on_delete=models.CASCADE, null=True, blank=True, default=None)
     reason_for_rejection = models.CharField(max_length=255, default=None, null=True, blank=True)
@@ -94,19 +95,20 @@ class Requisition(models.Model):
         return str(self.id)
 
     def get_absolute_url(self):
-        return reverse("requisition", kwargs={"id": str(self.id)})
+        return reverse("requisition", kwargs={"id": self.id})
 
 
 class BudgetedExpense(models.Model):
     requisition = models.ForeignKey(Requisition, on_delete=models.CASCADE, default=None, null=True, blank=True)
     budget_line = models.ForeignKey(BudgetLine, on_delete=models.CASCADE, default=None, null=True, blank=True)
     description = models.CharField(max_length=150, default=None, null=True, blank=True)
-    quantity = models.PositiveIntegerField(null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=0, null=True, blank=True)
     unit_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True, blank=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return self.requisition
+        return self.description
 
     def get_absolute_url(self):
         return reverse("landing", kwargs={"id": self.id})
@@ -153,6 +155,7 @@ class ActualExpense(models.Model):
     quantity = models.PositiveIntegerField(default=0, null=True, blank=True)
     unit_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True, blank=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=None, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
 
 
     def __str__(self):

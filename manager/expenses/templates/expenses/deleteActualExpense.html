@@ -7,9 +7,9 @@
         <div class="card card-body">
 
             <p>Are you sure your want to delete "{{item}}"?</p>
-            <form action="{% url 'delete_requisition' item.id %}" method="POST">
+            <form action="{% url 'delete_actualExpense' item.id %}" method="POST">
                 {% csrf_token %}
-                <a href="{% url 'requisitions' %}">Cancel</a>
+                <a href="{% url 'liquidations' %}">Cancel</a>
 
                 <input type="submit" name="Confirm">
             </form>
