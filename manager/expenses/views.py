@@ -129,20 +129,6 @@ def requisitionsDashboard(request):
 
     myFilter = RequisitionFilter(request.GET, queryset=requisitions)
     requisitions = myFilter.qs
-
-    # paginate_by = 10
-    # qs = Requisition.objects.order_by('-date_requested')
-    # # … filtering goes here…
-    # paginator = Paginator(qs, paginate_by)
-    # page_number = request.GET.get("page")
-    # try:
-    #     page = paginator.page(page_number)
-    # except PageNotAnInteger:
-    #     # If page is not an integer, show first page.
-    #     page = paginator.page(1)
-    # except EmptyPage:
-    #     # If page is out of range, show last existing page.
-    #     page = paginator.page(paginator.num_pages)
    
     context = {
             'requisitions': requisitions,
@@ -154,7 +140,6 @@ def requisitionsDashboard(request):
             'paid': paid, 
             'confirmed': confirmed,
             'myFilter': myFilter,
-            # "object_list": page,
            }
 
     return render(request, 'expenses/requisitions.html', context)
