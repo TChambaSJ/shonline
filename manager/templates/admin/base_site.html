@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django Site Admin') }}{% endblock %}
+
+{% load static %}
+{% block branding %}
+
+
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <!-- <img src="{% static 'sh_logo.png' %}" height="40px" /> -->
+    </a>
+    Silveira House Online Manager
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

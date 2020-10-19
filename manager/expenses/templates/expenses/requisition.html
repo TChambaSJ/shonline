@@ -4,7 +4,7 @@
 {% block content %}
 {% include 'expenses/requisitionStatus.html' %}
 
-
+<br>
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
@@ -33,9 +33,10 @@
                     <td>{{ budgetedExpense.unit_cost }}</td>
                     <td>{{ budgetedExpense.total }}</td>
                     <td>{{ budgetedExpense.date_created }}</td>
+                    {% if requisition.requested_by == user and requisition.status != 'Paid' %}
                     <td><a class="btn btn-sm btn-info" href="{% url 'update_budgetedExpense' budgetedExpense.id %}">Update</a></td>
                     <td><a class="btn btn-sm btn-danger" href="{% url 'delete_budgetedExpense' budgetedExpense.id %}">Delete</a></td>
-                
+                    {% endif %}
                 </tr>
                 {% endfor %}
 

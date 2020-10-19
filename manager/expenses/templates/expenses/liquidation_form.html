@@ -15,8 +15,9 @@
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">Liquidation Form</legend>
                     <div class="row">
-                        <div class="col-md-6">{{ form.requisition|as_crispy_field }}</div>
-                        <div class="col-md-6">{{ form.compiled_by|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.requisition|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.compiled_by|as_crispy_field }}</div>
+                        <div class="col-md-4">{{ form.status|as_crispy_field }}</div>
                     </div>
                     <div class="row">
                        <div class="col-md-4">{{ form.total_requested|as_crispy_field }}</div>

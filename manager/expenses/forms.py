@@ -45,7 +45,7 @@ class CloseLiquidationForm(ModelForm):
 class LiquidationForm(ModelForm):
     class Meta:
         model = Liquidation
-        fields = ['requisition', 'compiled_by', 'total_requested', 'total_spent', 'balance','comments' ,'receipts' ]
+        fields = ['requisition', 'status','compiled_by', 'total_requested', 'total_spent', 'balance','comments' ,'receipts' ]
 
 class ProcessLiquidationForm(ModelForm):
     class Meta:

@@ -6,26 +6,15 @@
             {% if liquidation.status == 'Pending' and liquidation.compiled_by != user %} 
                 <p>Status: {{ requisition.status }}</p>
                 <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'process-liquidation' liquidation.id %}">Process</a>
-                
-            {% elif liquidation.status == 'Processed' %}
-                <p>Status: {{ requisition.status }}</p>
-                <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'close-liquidation' liquidation.id %}">Close</a>
-
             {% else %}
                 <p>Status: {{liquidation.status}}</p>
-
             {% endif %}
-            
-                
-
+                           
             {% if liquidation.compiled_by == user and liquidation.status != 'Processed' %}
-            
                 <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'update_liquidation' liquidation.id %}">Update</a>
-                <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
+                <a class="btn btn-outline-danger btn-sm btn-block" href="{% url 'delete_liquidation' liquidation.id %}">Delete</a>
                 <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_actualExpense' liquidation.id %}">Add Expense</a>
-                
-            {% endif %}
-            
+            {% endif %}          
 
         </div>
     </div>

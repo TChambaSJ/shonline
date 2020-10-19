@@ -8,7 +8,7 @@ from users.decorators import allowed_users, unauthenticated_user
 # ******************* Create Views ***********************
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Project Coordinator', 'Programmes Manager', 'Director'])
+@allowed_users(allowed_roles=['ProjectS Officer', 'ProjectS Coordinator', 'Programmes Manager', 'Director'])
 def taskCreate(request, pk):
     project = Project.objects.get(id=pk)
     form = TaskForm(initial={'project': project})
@@ -22,7 +22,7 @@ def taskCreate(request, pk):
     return render(request, 'projects/task_form.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Coordinator', 'Programmes Manager', 'Director'])
+@allowed_users(allowed_roles=['ProjectS Coordinator', 'Programmes Manager', 'Director'])
 def projectCreate(request):
     form = ProjectForm()
     if request.method == 'POST':
@@ -36,7 +36,7 @@ def projectCreate(request):
 ######################## List Views ####################################
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Project Coordinator', 'Programmes Manager', 'Director'])
+# @allowed_users(allowed_roles=['Projects Officer', 'Projects Coordinator', 'Programmes Manager', 'Director'])
 def dashboard(request):
     projects = Project.objects.all()
     tasks = Task.objects.all()
@@ -54,7 +54,7 @@ def dashboard(request):
     return render(request, 'projects/dashboard.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Project Coordinator', 'Programmes Manager', 'Director'])
+@allowed_users(allowed_roles=['Projects Officer', 'Projects Coordinator', 'Programmes Manager', 'Director'])
 def tasks(request):
     tasks = Task.objects.all()
     return render(request, 'projects/tasks.html', {'tasks': tasks})
@@ -62,7 +62,7 @@ def tasks(request):
 ################## Detail or Read Views ##########################
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Project Coordinator', 'Programmes Manager', 'Director'])
+# @allowed_users(allowed_roles=['Projects Officer', 'Projects Coordinator', 'Programmes Manager', 'Director'])
 def project(request, pk):
     project = Project.objects.get(id=pk)
     tasks = project.task_set.all()
@@ -72,7 +72,7 @@ def project(request, pk):
     return render(request, 'projects/project.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Project Coordinator', 'Programmes Manager', 'Director'])
+# @allowed_users(allowed_roles=['Projects Officer', 'Projects Coordinator', 'Programmes Manager', 'Director'])
 def projectDetail(request):
     return render(request, 'projects/project_detail.html')
 
@@ -80,7 +80,7 @@ def projectDetail(request):
 ######################## Update Views ##################################
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Project Coordinator', 'Programmes Manager', 'Director'])
+@allowed_users(allowed_roles=['Projects Officer', 'Projects Coordinator', 'Programmes Manager', 'Director'])
 def updateTask(request, pk):
     task = Task.objects.get(id=pk)
     form = TaskForm(instance=task)
@@ -97,7 +97,7 @@ def updateTask(request, pk):
 ############################# Delete Views ###########################
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Coordinator', 'Programmes Manager', 'Director'])
+@allowed_users(allowed_roles=['Projects Coordinator', 'Programmes Manager', 'Director'])
 def deleteTask(request, pk):
     task = Task.objects.get(id=pk)
     if request.method == "POST":

@@ -4,16 +4,17 @@ from django.contrib.auth.models import Group
 from django.urls import reverse, reverse_lazy
 from .forms import RequisitionForm, ActualExpenseForm, CloseLiquidationForm, ProcessLiquidationForm, ConfirmPaymentForm, LiquidationForm, ProcessRequisitionForm ,BudgetedExpenseForm, AuthoriseRequisitionForm, RecommendRequisitionForm
 from .filters import RequisitionFilter, LiquidationFilter
-from .models import Requisition, Liquidation, BudgetedExpense, ActualExpense, Budget
+from expenses.models import Requisition, Liquidation, BudgetedExpense, ActualExpense, Budget
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from users.decorators import allowed_users, unauthenticated_user
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # ******************* AllCreate Views ***********************
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
 def requisitionCreate(request):
     form = RequisitionForm(request.POST or None)
     if form.is_valid():
@@ -28,7 +29,22 @@ def requisitionCreate(request):
     return render(request, 'expenses/requisition_form.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
+def liquidationCreate(request, pk):
+    requisition = Requisition.objects.get(id=pk)
+    form = LiquidationForm(initial={'requisition': requisition})
+
+    if request.method == 'POST':
+        form = LiquidationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/liquidations')
+
+    context = {'form': form}
+    return render(request, 'expenses/liquidation_form.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
 def budgetedExpenseCreate(request, pk):
     BudgetedExpenseFormSet = inlineformset_factory(Requisition,
                                                  BudgetedExpense,
@@ -53,7 +69,7 @@ def budgetedExpenseCreate(request, pk):
     return render(request, 'expenses/budgetedExpense_form.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
 def actualExpenseCreate(request, pk):
     ActualExpenseFormSet = inlineformset_factory(Liquidation,
                                                  ActualExpense,
@@ -78,6 +94,7 @@ def actualExpenseCreate(request, pk):
     return render(request, 'expenses/actualExpense_form.html', context)
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['Projects Officers', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
 def updateActualExpense(request, pk):
     actualExpense = ActualExpense.objects.get(id=pk)
     ActualExpenseFormSet = inlineformset_factory(Liquidation, ActualExpense, fields=(
@@ -93,29 +110,15 @@ def updateActualExpense(request, pk):
     context = {'formset': formset, 'actualExpense':actualExpense}
     return render(request, 'expenses/actualExpense_form.html', context)
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 'Finance Officer', 'Director', 'Admin Staff'])
-def liquidationCreate(request, pk):
-    requisition = Requisition.objects.get(id=pk)
-    form = LiquidationForm(initial={'requisition': requisition})
-
-    if request.method == 'POST':
-        form = LiquidationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/liquidations')
-
-    context = {'form': form}
-    return render(request, 'expenses/liquidation_form.html', context)
 
 
 # ************************* List Views *****************************
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def requisitionsDashboard(request):
-    requisitions = Requisition.objects.all().order_by('-date_requested')
+    requisitions = Requisition.objects.all()
     pending = requisitions.filter(status='Pending').count()
     recommended = requisitions.filter(status='Recommended').count()
     authorised = requisitions.filter(status='Authorised').count()
@@ -127,6 +130,20 @@ def requisitionsDashboard(request):
     myFilter = RequisitionFilter(request.GET, queryset=requisitions)
     requisitions = myFilter.qs
 
+    # paginate_by = 10
+    # qs = Requisition.objects.order_by('-date_requested')
+    # # … filtering goes here…
+    # paginator = Paginator(qs, paginate_by)
+    # page_number = request.GET.get("page")
+    # try:
+    #     page = paginator.page(page_number)
+    # except PageNotAnInteger:
+    #     # If page is not an integer, show first page.
+    #     page = paginator.page(1)
+    # except EmptyPage:
+    #     # If page is out of range, show last existing page.
+    #     page = paginator.page(paginator.num_pages)
+   
     context = {
             'requisitions': requisitions,
             'pending': pending,
@@ -136,13 +153,14 @@ def requisitionsDashboard(request):
             'processed': processed,
             'paid': paid, 
             'confirmed': confirmed,
-            'myFilter': myFilter
+            'myFilter': myFilter,
+            # "object_list": page,
            }
 
     return render(request, 'expenses/requisitions.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def liquidationsDashboard(request):
     liquidations = Liquidation.objects.all().order_by('-date_submitted')
@@ -170,9 +188,8 @@ def landing(request):
 
 # ************************ Detail Views *************************
 
-
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def requisition(request, pk):
     requisition = Requisition.objects.get(id=pk)
@@ -183,7 +200,7 @@ def requisition(request, pk):
     return render(request, 'expenses/requisition.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def liquidation(request, pk):
     liquidation = Liquidation.objects.get(id=pk)
@@ -196,7 +213,7 @@ def liquidation(request, pk):
 ######################## Update Views ####################################
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department', 'Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department', 'Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def updateRequisition(request, pk):
     requisition = Requisition.objects.get(id=pk)
@@ -212,7 +229,7 @@ def updateRequisition(request, pk):
     return render(request, 'expenses/requisition_form.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def updateLiquidation(request, pk):
     liquidation = Liquidation.objects.get(id=pk)
@@ -228,7 +245,7 @@ def updateLiquidation(request, pk):
     return render(request, 'expenses/liquidation_form.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def updateBudgetedExpense(request, pk):
     budgetedExpense = BudgetedExpense.objects.get(id=pk)
@@ -244,7 +261,7 @@ def updateBudgetedExpense(request, pk):
     return render(request, 'expenses/budgetedExpense_form.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['Project Officer', 'Head of Department','Manager', 
+@allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def updateActualExpense(request, pk):
     actualExpense = ActualExpense.objects.get(id=pk)
@@ -405,7 +422,3 @@ def deleteActualExpense(request, pk):
         return redirect('/liquidations')
     context = {'item': actualExpense}
     return render(request, 'expenses/deleteActualExpense.html', context)
-
-
-
-

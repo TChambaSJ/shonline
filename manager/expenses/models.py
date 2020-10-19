@@ -126,7 +126,7 @@ class Liquidation(models.Model):
         ('Pending', 'Pending'),
         ('Processed', 'Processed'),
         ('Rejected', 'Rejected'),
-        ('Closed', 'Closed'),
+        ('Updated', 'Updated'),
     )
     requisition = models.ForeignKey(Requisition, on_delete=models.CASCADE, default=None)
     total_requested = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)

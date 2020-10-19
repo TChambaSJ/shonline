@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.contrib.auth.models import User
 from . import views
+
 
 urlpatterns = [
 
@@ -22,6 +23,7 @@ urlpatterns = [
 
     path('liquidation/<str:pk>/', views.liquidation, name='liquidation'),
     path('requisition/<str:pk>/', views.requisition, name='requisition'),
+    # re_path(r'requisition/(?P<pk>[0-9]+)/$', views.requisition, name='requisition'),
     
 
 
@@ -32,6 +34,8 @@ urlpatterns = [
     path('update_liquidation/<str:pk>/', views.updateLiquidation, name='update_liquidation'),
     path('update_requisition/<str:pk>/', views.updateRequisition, name='update_requisition'),
 
+# ******************************* Approval Flow URLs ****************************
+
     path('recommend-requisition/<str:pk>/', views.recommendRequisition, name='recommend-requisition'),
     path('authorise-requisition/<str:pk>/', views.authoriseRequisition, name='authorise-requisition'),
     path('process-requisition/<str:pk>/', views.processRequisition, name='process-requisition'),
@@ -39,9 +43,6 @@ urlpatterns = [
 
     path('process-liquidation/<str:pk>/', views.processLiquidation, name='process-liquidation'),
     path('close-liduidation/<str:pk>/', views.closeLiquidation, name='close-liquidation'),
-
-
-
 
 # ******************************* Delete URLs *****************************
 

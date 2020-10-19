@@ -31,9 +31,10 @@
                     <td>{{ actualExpense.quantity }}</td>
                     <td>{{ actualExpense.unit_cost }}</td>
                     <td>{{ actualExpense.total }}</td>
-                    <td><a class="btn btn-sm btn-info" href="{% url 'update_actualExpense' actualExpense.id %}">Update</a></td>
+                    {% if liquidation.compiled_by == user and liquidation.status != 'Processed' %}
+                    <td><a class="btn btn-sm btn-info" href="{% url 'update_actualExpense' actualExpense.id %}">Edit</a></td>
                     <td><a class="btn btn-sm btn-danger" href="{% url 'delete_actualExpense' actualExpense.id %}">Delete</a></td>
-                                  
+                    {% endif %}             
                 </tr>
                 {% endfor %}
                 
