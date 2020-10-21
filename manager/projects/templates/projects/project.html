@@ -1,60 +1,8 @@
 {% extends "blog/main.html" %}
-{% load humanize %}
+
 
 {% block content %}
-
-<div class="row" >
-    <div class="col-md-8">
-        <div class="row" >
-            <div class="col-md-4">
-                <div class="card card-body">
-                    <a class="btn btn-outline-info btn-sm btn-block" href="">Update</a>
-                    <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
-                    <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_task' project.id %}">Create Task</a>
-                    <a class="btn btn-outline-info btn-sm btn-block" href="">Create Objective</a>
-                </div>
-            </div>
-            <div class="col-md-8">
-
-                <div class="card card-body">
-                    <p>Title: {{ project.title }}</p>
-                    <p>Sponsor: {{project.budget}}</p>
-                    <p>Manager: {{ project.manager }}</p>
-                    <p>Grant Size: {{project.amount_allocated|floatformat:2|intcomma}}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card text-center text-white mb-3" id='tasks-completed'>
-                    <div class="card-header">
-                        <h5 class="card-title" id=top-title>Burn Rate</h5>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title" id=top-title></h3>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-6">
-                <div class="card text-center text-white mb-3" id='tasks-completed'>
-                    <div class="card-header">
-                        <h5 class="card-title" id=top-title>Work Rate</h5>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title" id=top-title></h3>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<br>
+{% include 'projects/projectDetailStatus.html' %}
 
 <div class="row">
     <div class="card card-body">
@@ -67,39 +15,33 @@
 </div>
 
 <div class="row">
-    <div class="col-md">
-        <div class="card card-body">
-            <table class="table table-sm">
-                <tr>
-                    <th>Objective</th>
-                    <th>Task</th>
-                    <th>Start Date</th>
-                    <th>Duration</th>
-                    <th>Assigned to</th>
-                    <th>Status</th>
-                    <th>Update</th>
-                    <th>Delete</th>
-                    
-                </tr>
-                {% for i in tasks %}
-                <tr>
-                    <td>{{ i.objective }}</td>
-                    <td>{{ i.title }}</td>
-                    <td>{{ i.start_date|date:'Y-m-d' }}</td>
-                    <td>{{ i.duration }}</td>
-                    <td>{{ i.assigned_to }}</td>
-                    <td>{{ i.status }}</td>
-                    <td><a class="btn btn-sm btn-info" href="">Update</a></td>
-                    <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>
-                                  
-                </tr>
-                {% endfor %}
-                
-            </table>
+    <div class="col">
+        <table class="table table-sm">
+            <tr>
+                <th>Task Title</th>
+                <th>Objective</th>
+                <th>Start Date</th>
+                <th>Duration</th>
+                <th>End Date</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th></th>                
+            </tr>
+                {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.objective }}</td>
+                <td>{{ task.start_date}}</td>
+                <td>{{ task.duration}}</td>
+                <td>{{ task.end_date}}</td>
+                <td>{{ task.assigned_to}}</td>
+                <td>{{ task.status}}</td>
+                <td><a class="btn btn-sm btn-info" href="">View</a></td>                
+            </tr>
+            {% endfor %}        
+        </table>
 
-        </div> 
-
-    </div>
+    </div> 
 
 </div>
 

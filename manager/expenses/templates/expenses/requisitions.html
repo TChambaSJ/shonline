@@ -1,5 +1,6 @@
 {% extends "blog/main.html" %}
 {% load crispy_forms_tags %}
+{% load humanize %}
 
 {% block content %}
 {% include 'expenses/status.html' %}
@@ -11,13 +12,29 @@
         <form action="" method="get">
             <div class="row">
                 <div class="col-md-2">
-                    <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_requisition' %}" id='create-button'>Create New Requisition</a>
+                  <a class="btn btn-primary btn-sm btn-block" href="{% url 'create_requisition' %}" id='create-button'>Create New Requisition</a> 
+                  
                 </div>
-                <div class="col-md-2">{{ myFilter.form.budget|as_crispy_field }}</div>
-                <div class="col-md-2">{{ myFilter.form.requested_by|as_crispy_field }}</div>
-                <div class="col-md-2">{{ myFilter.form.payee|as_crispy_field }}</div>
-                <div class="col-md-2">{{ myFilter.form.status|as_crispy_field }}</div>
-                <div class="col-md-2"><button class="btn-primary btn-sm btn-block" type="submit" id='create-button'>Search</button></div>
+                <div class="col-md-2">
+                  
+                  {{ myFilter.form.budget|as_crispy_field}}
+                </div>
+                <div class="col-md-2">
+                  
+                  {{ myFilter.form.requested_by|as_crispy_field}}
+                </div>
+                <div class="col-md-2">
+                 
+                  {{ myFilter.form.payee|as_crispy_field}}
+                </div>
+                <div class="col-md-2">
+               
+                  {{ myFilter.form.status|as_crispy_field}}
+                </div>
+                <div class="col-md-2">
+                  <button class="btn-primary btn-sm btn-block" type="submit" id='create-button'>Search</button>
+                 
+                </div>
             </div>
         </form>
     </div>
@@ -29,10 +46,10 @@
             <th>Budget</th>
             <th>Requested by</th>
             <th>Payee</th>
-            <th>Date Submitted</th>
             <th>Amount</th>
             <th>Payment Type</th>
             <th>Status</th>
+            <th>Date Submitted</th>
             <th></th>
         </tr>
 
@@ -42,11 +59,11 @@
             <td>{{ i.budget }}</td>
             <td>{{ i.requested_by }}</td>
             <td>{{ i.payee }}</td>
-            <td>{{ i.date_requested }}</td>
-            <td>{{ i.total }}</td>
+            <td>${{ i.total|intcomma }}</td>
             <td>{{ i.payment_type }}</td>
             <td>{{ i.status}}</td>
-            <td><a class="btn btn-sm btn-info" href="">View</a></td>
+            <td>{{ i.date_requested }}</td>
+            <td><a class="btn btn-sm btn-info" href="{% url 'requisition' requisition.id ">View</a></td>
         </tr>
         {% endfor %}
         {% if is_paginated %}

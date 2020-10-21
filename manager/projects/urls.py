@@ -12,5 +12,5 @@ urlpatterns = [
     path('create_task/<str:pk>', views.taskCreate, name='create_task'),
     path('update_task/<str:pk>/update', views.updateTask, name='update_task'),
     path('delete_task/<str:pk>/delete', views.deleteTask, name='delete_task'),
-
+    path('create_progressReport/', views.progressReportCreate, name='create_progressReport')
 ]

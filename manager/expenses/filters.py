@@ -4,7 +4,7 @@ from .models import *
 
 
 class RequisitionFilter(django_filters.FilterSet):
-
+    start_date = DateFilter(field_name='date_requested', lookup_expr='gte',)
     class Meta:
         model = Requisition
         fields = ['budget', 'requested_by', 'payee', 'status']

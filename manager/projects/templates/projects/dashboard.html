@@ -10,17 +10,14 @@
 
             <table class="table table-sm">
                 <tr>
-                    <th></th>
                     <th>Project</th>
-                    <th>Manager</th>
+                    <th>Manager</th>    
                 </tr>
 
                 {% for project in projects %}
                 <tr>
-                    <td><a class="btn btn-sm btn-info" href="{% url 'project' project.id %}">View</a></td>
-                    <td>{{ project.title }}</td>
+                    <td><a class="btn btn-sm btn-info" href="{% url 'project' project.id %}">{{ project.title }}</a></td>
                     <td>{{ project.manager}}</td>
-
                 </tr>
     
                 {% endfor %}
@@ -35,24 +32,24 @@
            <h5>Tasks</h5>
         <table class="table table-sm">
             <tr>
-                <th>Task</th>
-                <th>Starts</th>
-                <th>Ends</th>
+                <th>Project</th>
+                <th>Name</th>
                 <th>Assigned to</th>
                 <th>Status</th>
-                <th>Update</th>
-                <th>Remove</th>
+                <th></th>
+                <th></th>
+                
             </tr>
 
             {% for i in tasks %}
             <tr>
+                <td>{{ i.project}}</td>
                 <td>{{ i.title }}</td>
-                <td>{{ i.start_date|date:'Y-m-d'}}</td>
-                <td>{{ i.end_date|date:'Y-m-d'}}</td>
                 <td>{{ i.assigned_to }}</td>
                 <td>{{ i.status }}</td>
                 <td><a class="btn btn-sm btn-info" href="">Update</a></td>
-                <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>
+                <td><a class="btn btn-sm btn-info" href="">Delete</a></td>
+                
             </tr>
             {% endfor %}
         </table>
@@ -63,3 +60,9 @@
 
 
 {% endblock %}
+<!-- 
+<th>Starts</th>
+                <th>Ends</th>
+
+<td>{{ i.start_date|date:'Y-m-d'}}</td>
+                <td>{{ i.end_date|date:'Y-m-d'}}</td> -->

@@ -50,8 +50,8 @@ class Task(models.Model):
             ('In Progress', 'In Progress'),
             ('Completed', 'Completed'),
             )
-
     title = models.CharField(max_length=255)
+    location = models.CharField(max_length=150, default=None, null=True, blank=True)
     description = models.TextField(max_length=500)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
     objective = models.ForeignKey(Objective, on_delete=models.CASCADE)

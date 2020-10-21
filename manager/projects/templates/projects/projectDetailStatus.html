@@ -1,0 +1,49 @@
+{% load humanize %}
+<div class="row" >
+    <div class="col-md-2">
+        <div class="card card-body">
+            <p>Status: {{project.status}}</p>
+            {% if project.manager == user %}
+            <a class="btn btn-outline-info btn-sm btn-block" href="">Update</a>
+            <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
+            <a class="btn btn-outline-danger btn-sm btn-block" href="">Add Indicators</a>
+            {% endif %}
+            <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_task' project.id %}">Create Task</a>
+            <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_progressReport' %}">Create New Report</a>
+        </div>    
+    </div>
+            
+    <div class="col-md-6">
+        <div class="card card-body">
+            <p>Title: {{ project.title }}</p>
+            <p>Sponsor: {{project.budget}}</p>
+            <p>Manager: {{ project.manager }}</p>
+            <p>Grant Size: ${{project.amount_allocated|intcomma }}</p>
+        </div>
+    </div> 
+    <div class="col-md-2">
+        <div class="card text-center text-white mb-3" id='tasks-in-progress'>
+            <div class="card-header">
+                <h5 class="card-title" id=top-title>Remaining Tasks</h5>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title" id=top-title>{{ tasks_remaining }}</h3>
+            </div>
+        </div>
+    </div>   
+                
+    <div class="col-md-2">
+        <div class="card text-center text-white mb-3" id='tasks-completed'>
+            <div class="card-header">
+                <h5 class="card-title" id=top-title>Completed Tasks</h5>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title" id=top-title>{{ tasks_completed }}</h3>
+            </div>
+        </div>
+    </div>
+            
+</div>
+
+
+<br>

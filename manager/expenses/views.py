@@ -1,3 +1,4 @@
+from django.views.generic import DetailView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.contrib.auth.models import Group
@@ -118,7 +119,7 @@ def updateActualExpense(request, pk):
 @allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
 def requisitionsDashboard(request):
-    requisitions = Requisition.objects.all()
+    requisitions = Requisition.objects.all().order_by('-date_requested')
     pending = requisitions.filter(status='Pending').count()
     recommended = requisitions.filter(status='Recommended').count()
     authorised = requisitions.filter(status='Authorised').count()
@@ -176,13 +177,14 @@ def landing(request):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 
 'Finance Officer', 'Director', 'Admin Staff'])
-def requisition(request, pk):
+def requisition(request, pk, *args, **kwargs):
     requisition = Requisition.objects.get(id=pk)
     budgetedExpenses = BudgetedExpense.objects.all().order_by('-id').filter(requisition=requisition)
     liquidations = requisition.liquidation_set.all()
 
     context = {'requisition': requisition, 'liquidations': liquidations, 'budgetedExpenses': budgetedExpenses}
     return render(request, 'expenses/requisition.html', context)
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['Projects Officer', 'Head of Department','Manager', 

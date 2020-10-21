@@ -22,10 +22,8 @@ urlpatterns = [
 
 
     path('liquidation/<str:pk>/', views.liquidation, name='liquidation'),
-    path('requisition/<str:pk>/', views.requisition, name='requisition'),
-    # re_path(r'requisition/(?P<pk>[0-9]+)/$', views.requisition, name='requisition'),
+    re_path(r'^requisition/(?P<pk>\d+)/$', views.requisition, name='requisition'), 
     
-
 
 # ******************************* Update URLs ****************************
     

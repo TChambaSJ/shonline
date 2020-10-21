@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.urls import reverse, resolvers
+from django.urls import reverse
 
 
 class Manager(models.Model):
@@ -91,11 +91,11 @@ class Requisition(models.Model):
     reason_for_rejection = models.CharField(max_length=255, default=None, null=True, blank=True)
     quotation = models.FileField(default=None, storage='media/attachments', null=True, blank=True)
 
-    def __str__(self):
-        return str(self.id)
-
     def get_absolute_url(self):
         return reverse("requisition", kwargs={"id": self.id})
+
+    def __str__(self):
+        return str(self.id)  
 
 
 class BudgetedExpense(models.Model):
