@@ -1,0 +1,48 @@
+{% extends "blog/main.html" %}
+{% load humanize %}
+
+{% block content %}
+<br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-body">
+            <h5>Progress Indicators</h5>
+            <table class="table table-sm">
+                <tr>
+                    
+                    <th>Project</th>
+                    <th>Objective</th>
+                    <th>Indicator</th>
+                    <th>Current Value</th>
+                    <th>Record Date</th>
+                    <th>Project Officer</th>
+                    <th>Comment</th>
+                    <th></th>
+                    <th></th>
+
+                    
+                </tr>
+                {% for pi in progressIndicators %}
+                <tr>
+                    
+                    <td>{{ pi.project }}</td>
+                    <td>{{ pi.objective }}</td>
+                    <td>{{ pi.indicator }}</td>
+                    <td>{{ pi.current_value }}</td>
+                    <td>{{ pi.date_recorded }}</td>
+                    <td>{{ pi.official }}</td>
+                    <td>{{ pi.comment }}</td>
+                    <td><a class="btn btn-sm btn-info" href="">Edit</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>                
+                </tr>
+                {% endfor %}
+                
+            </table>
+
+        </div> 
+
+    </div>
+
+</div>
+
+{% endblock %}

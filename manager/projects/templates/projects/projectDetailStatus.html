@@ -6,9 +6,9 @@
             {% if project.manager == user %}
             <a class="btn btn-outline-info btn-sm btn-block" href="">Update</a>
             <a class="btn btn-outline-danger btn-sm btn-block" href="">Delete</a>
-            <a class="btn btn-outline-danger btn-sm btn-block" href="">Add Indicators</a>
             {% endif %}
-            <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_task' project.id %}">Create Task</a>
+            <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'add-progressIndicator' %}">Add Indicator</a>
+            <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_task' project.id %}">Add New Task</a>
             <a class="btn btn-outline-info btn-sm btn-block" href="{% url 'create_progressReport' %}">Create New Report</a>
         </div>    
     </div>

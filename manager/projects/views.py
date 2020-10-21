@@ -49,15 +49,14 @@ def progressIndicatorAdd(request):
         form = ProgressIndicatorForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/dashboard')
+            return redirect('/monitoringDashboard')
+            
     context = {'form':form}
     return render(request, 'projects/progressIndicatorForm.html', context)
-
 
 ######################## List Views ####################################
 
 @login_required(login_url='login')
-
 def dashboard(request):
     projects = Project.objects.all()
     tasks = Task.objects.all().order_by('-start_date')
@@ -77,7 +76,13 @@ def dashboard(request):
     return render(request, 'projects/dashboard.html', context)
 
 @login_required(login_url='login')
+def monitoringDashboard(request):
+    progressIndicators = ProgressIndicator.objects.all().order_by('-date_recorded')
 
+    context = {'progressIndicators':progressIndicators}
+    return render(request, 'projects/monitoringDashboard.html', context)
+
+@login_required(login_url='login')
 def tasks(request):
     tasks = Task.objects.all()
     return render(request, 'projects/tasks.html', {'tasks': tasks})
@@ -89,8 +94,8 @@ def tasks(request):
 def project(request, pk):
     project = Project.objects.get(id=pk)
     tasks = project.task_set.all().order_by('-start_date')
-    task_count = tasks.count()
 
+    task_count = tasks.count()
     not_started = tasks.filter(status='Not Started').count()
     in_progress = tasks.filter(status='In Progress').count()
     tasks_completed = tasks.filter(status='Completed').count()

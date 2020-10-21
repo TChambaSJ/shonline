@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Task, Project, ProgressIndicator, ProgressReport
+from .models import Goal, Project, Activity, Task, BaselineIndicator, ProgressIndicator, ProgressReport
 
 
 class TaskForm(ModelForm):
@@ -21,3 +21,10 @@ class ProgressIndicatorForm(ModelForm):
     class Meta:
         model = ProgressIndicator
         fields = '__all__'
+
+class ActivityForm(ModelForm):
+    class Meta: 
+        model = Activity
+        fields = '__all__'
+
+

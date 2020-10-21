@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from expenses.models import Budget
+from django.urls import reverse
 
 
 class Goal(models.Model):
@@ -42,6 +43,12 @@ class Objective(models.Model):
     def __str__(self):
         return self.name
 
+class Activity(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE)
+    activity = models.CharField(max_length=150, default=None)
+    description = models.TextField(max_length=500, default=None, null=True, blank=True)
+
 
 class Task(models.Model):
 
@@ -50,14 +57,15 @@ class Task(models.Model):
             ('In Progress', 'In Progress'),
             ('Completed', 'Completed'),
             )
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, default=None, null=True, blank=True)
     title = models.CharField(max_length=255)
     location = models.CharField(max_length=150, default=None, null=True, blank=True)
     description = models.TextField(max_length=500)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
-    objective = models.ForeignKey(Objective, on_delete=models.CASCADE)
-    start_date = models.DateField()
+    start_date = models.DateField(default=timezone.now)
     duration = models.IntegerField()
-    end_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(default=timezone.now, null=True, blank=True)
     assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=30, choices=STATUS, default='Not Started')
 
@@ -91,10 +99,9 @@ class BaselineIndicator(models.Model):
             ('9', 'Excellent'),
             ('10', 'Perfect')
         )
-
-    name = models.CharField(max_length=255)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
     objective = models.ForeignKey(Objective, on_delete=models.CASCADE, default=None)
+    name = models.CharField(max_length=255)
     level = models.CharField(max_length=100, choices=LEVEL, default='Output')
     category = models.CharField(max_length=20, choices=TYPE)
     baseline_value = models.FloatField(default=0.0)
@@ -123,14 +130,17 @@ class ProgressIndicator(models.Model):
             )
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     objective = models.ForeignKey(Objective, on_delete=models.CASCADE, default=None)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
     indicator = models.ForeignKey(BaselineIndicator, on_delete=models.CASCADE)
     current_value = models.FloatField(default=0.0)
-    current_date = models.DateTimeField(auto_now_add=True)
+    date_recorded = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    official = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     comment = models.CharField(max_length=20, choices=COMMENT, default='Okay')
 
+    def get_absolute_url(self):
+        return reverse("monitoringDashboard", kwargs={"id": self.id})
+
     def __str__(self):
-        return self.indicator.name
+        return str(self.id)
 
 
 class ProgressReport(models.Model):
